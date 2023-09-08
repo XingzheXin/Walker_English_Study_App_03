@@ -2,6 +2,6 @@ Assets_Root/
 .DS_Store
 
 # ignore user files
-*.xcodeproj/xcuserdata/
-*.xcworkspace/xcuserdata/
+*.xcodeproj/../xcuserdata/
+*.xcworkspace/../xcuserdata/
 
