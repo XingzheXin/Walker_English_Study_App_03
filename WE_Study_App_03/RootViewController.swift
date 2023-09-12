@@ -9,6 +9,12 @@ import UIKit
 
 class RootViewController: UIViewController {
     
+    let imageNames = ["240479", "240842", "243760", "247744", "249678", "251826", "252192", "253312", "280845", "294643", "304368"]
+    
+    func getRandomImageName() -> String? {
+        return imageNames.randomElement()
+    }
+    
     private lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
         scrollView.translatesAutoresizingMaskIntoConstraints = false
@@ -44,7 +50,7 @@ class RootViewController: UIViewController {
             rowStack.addArrangedSubview(leadingSpacer)
 
             for col in 0..<2 {
-                if idx >= buttonTextFromAssetsFolderNames.count {
+                if idx == buttonTextFromAssetsFolderNames.count {
                     break
                 }
                 let btn = UIButton()
@@ -65,7 +71,8 @@ class RootViewController: UIViewController {
 //                btn.configuration = config
                 
                 btn.setTitle("📚" + buttonTextFromAssetsFolderNames[idx], for: .normal)
-                btn.backgroundColor = .black
+//                btn.backgroundColor = .black
+                btn.backgroundColor = UIColor.random()
                 btn.titleLabel?.adjustsFontSizeToFitWidth = true
                 btn.titleLabel?.font = UIFont(name: "Marker Felt Wide", size: 100)
                 btn.titleLabel?.minimumScaleFactor = 0.1
@@ -115,9 +122,17 @@ class RootViewController: UIViewController {
         setupConstraints()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        if let randomImageName = getRandomImageName(),
+           let image = UIImage(named: randomImageName) {
+            view.backgroundColor = UIColor(patternImage: image)
+        }
+        
+        self.navigationController?.navigationBar.isHidden = true
+    }
+    
     private func setupView() {
         view.addSubview(scrollView)
-        
     }
     
     private func setupConstraints() {
@@ -138,11 +153,13 @@ class RootViewController: UIViewController {
     
     // MARK: Button touch selector functions
     @objc private func onClickBookNameButton(_ sender: UIButton) {
-        UIView.animate(withDuration: 0.3) {
-            sender.backgroundColor = UIColor.red
+        let originalColor = sender.backgroundColor
+        
+        UIView.animate(withDuration: 0.05) {
+            sender.backgroundColor = UIColor.blue
         } completion: { _ in
-            UIView.animate(withDuration: 0.3) {
-                sender.backgroundColor = UIColor.systemBlue
+            UIView.animate(withDuration: 0.05) {
+                sender.backgroundColor = originalColor
             }
         }
     }
