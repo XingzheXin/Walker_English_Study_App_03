@@ -9,11 +9,43 @@ import Foundation
 import UIKit
 
 class Utils {
-    static func getDirectoriesUnder(s: String) -> [String] {
+    public static func getSortedDirectories(in dir: String) -> [String] {
         let fileManager = FileManager.default
-        let path = Bundle.main.resourcePath! + "/" + s
+        let path = Bundle.main.resourcePath! + "/" + dir
         let items = try! fileManager.contentsOfDirectory(atPath: path)
         return items.sorted()
+    }
+    
+    public static func findFirstXMLFile(in directoryPath: String) -> String? {
+        let fileManager = FileManager.default
+        
+        do {
+            // Get the list of all files in the directory
+            let files = try fileManager.contentsOfDirectory(atPath: directoryPath)
+            
+            // Filter the list to only include .xml files
+            let xmlFiles = files.filter { $0.hasSuffix(".xml") }
+            
+            // Return the first .xml file
+            if let firstXMLFile = xmlFiles.first {
+                return directoryPath + "/" + firstXMLFile // Concatenating to create the full path
+            }
+            
+        } catch {
+            print("Error listing files in directory: \(error)")
+        }
+        
+        return nil
+    }
+    
+    public static func readXMLFile(at path: String) -> String? {
+        do {
+            let xmlData = try String(contentsOfFile: path)
+            return xmlData
+        } catch {
+            print("Error reading the file: \(error)")
+        }
+        return nil
     }
     
     public static func getPathContent(of path: String) -> [String] {
@@ -38,6 +70,7 @@ class Utils {
         
         return []
     }
+    
 
 }
 

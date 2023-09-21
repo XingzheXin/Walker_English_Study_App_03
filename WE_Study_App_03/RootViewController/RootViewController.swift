@@ -11,14 +11,25 @@ class RootViewController: UIViewController {
     
     let imageNames = ["240479", "240842", "243760", "247744", "249678", "251826", "252192", "253312", "280845", "294643", "304368"]
     
-    func getRandomImageName() -> String? {
-        return imageNames.randomElement()
-    }
+    private lazy var imageView: UIImageView = {
+        var imageView = UIImageView()
+        if let randomImageName = imageNames.randomElement(),
+           let image = UIImage(named: randomImageName) {
+            imageView = UIImageView(image: image)
+            imageView.contentMode = .scaleAspectFill
+        }
+        imageView.contentMode = .center
+        imageView.frame = self.view.bounds
+        imageView.backgroundColor = .black
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        
+        return imageView
+    }()
     
     private lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
         scrollView.translatesAutoresizingMaskIntoConstraints = false
-//        scrollView.backgroundColor = .orange
+        scrollView.backgroundColor = .clear
         scrollView.addSubview(buttonsVerticalStackView)
         return scrollView
         
@@ -31,21 +42,18 @@ class RootViewController: UIViewController {
         buttonsVerticalStackView.spacing = 32
         buttonsVerticalStackView.translatesAutoresizingMaskIntoConstraints = false
         
-        let buttonTextFromAssetsFolderNames = Utils.getDirectoriesUnder(s: "Assets_Root/")
+        let buttonTextFromAssetsFolderNames = Utils.getSortedDirectories(in: "Assets_Root/")
         let btnSizeMultiplier = 1.0/3
         
         var idx = 0
         for row in 0..<(buttonTextFromAssetsFolderNames.count + 1)/2{
             let rowStack = UIStackView()
-//            rowStack.backgroundColor = .purple
             rowStack.distribution = .equalSpacing // Filling equally horizontally
             buttonsVerticalStackView.addArrangedSubview(rowStack)
             rowStack.heightAnchor.constraint(equalTo: buttonsVerticalStackView.widthAnchor, multiplier: 0.2).isActive = true
 
             let leadingSpacer = UIView()
-//            leadingSpacer.backgroundColor = .red
             let trailingSpacer = UIView()
-//            trailingSpacer.backgroundColor = .cyan
 
             rowStack.addArrangedSubview(leadingSpacer)
 
@@ -54,24 +62,8 @@ class RootViewController: UIViewController {
                     break
                 }
                 let btn = UIButton()
-
-//                var config = UIButton.Configuration.filled()
-//                config.title = buttonTextFromAssetsFolderNames[idx]
-//                idx += 1
-//                config.titleTextAttributesTransformer =
-//                UIConfigurationTextAttributesTransformer { incoming in
-//                    var outgoing = incoming
-//                    outgoing.font = UIFont.systemFont(ofSize: 100)
-//                    return outgoing
-//                }
-//                config.baseForegroundColor = .systemPink
-//                config.baseBackgroundColor = .gray
-//                config.cornerStyle = .capsule
-//
-//                btn.configuration = config
                 
                 btn.setTitle("📚" + buttonTextFromAssetsFolderNames[idx], for: .normal)
-//                btn.backgroundColor = .black
                 btn.backgroundColor = UIColor.random()
                 btn.titleLabel?.adjustsFontSizeToFitWidth = true
                 btn.titleLabel?.font = UIFont(name: "Marker Felt Wide", size: 100)
@@ -123,22 +115,27 @@ class RootViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        if let randomImageName = getRandomImageName(),
-           let image = UIImage(named: randomImageName) {
-            view.backgroundColor = UIColor(patternImage: image)
-        }
-        
-        self.navigationController?.navigationBar.isHidden = true
+//        self.navigationController?.navigationBar.isHidden = true
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        self.navigationController?.navigationBar.isHidden = false
     }
     
     private func setupView() {
+        view.addSubview(imageView)
         view.addSubview(scrollView)
     }
     
     private func setupConstraints() {
         NSLayoutConstraint.activate([
+            imageView.topAnchor.constraint(equalTo: view.topAnchor, constant: 50),
+            imageView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -50),
+            imageView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 50),
+            imageView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -50),
+            
             scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             scrollView.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor),
             scrollView.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor),
             
@@ -162,6 +159,8 @@ class RootViewController: UIViewController {
                 sender.backgroundColor = originalColor
             }
         }
+        
+        self.navigationController?.pushViewController(BookContentListView(bookName: sender.titleLabel?.text?.removingEmojis() ?? "nil"), animated: true)
     }
     
 }
