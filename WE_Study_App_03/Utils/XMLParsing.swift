@@ -44,9 +44,9 @@ class XMLLessonParser: NSObject, XMLParserDelegate {
         
         switch elementName {
         case "lesson":
-            let id = attributeDict["id"] ?? "nil"
-            let EN_name = attributeDict["EN_name"] ?? "nil"
-            let ZH_name = attributeDict["ZH_name"] ?? "nil"
+            let id = attributeDict["id"] ?? ""
+            let EN_name = attributeDict["EN_name"] ?? ""
+            let ZH_name = attributeDict["ZH_name"] ?? ""
             let lessonCount = Int(attributeDict["lessonCount"] ?? "0") ?? 0
             currentLesson = Lesson(id: id,
                                    EN_name: EN_name,
@@ -56,10 +56,10 @@ class XMLLessonParser: NSObject, XMLParserDelegate {
             
         case "sentence":
             let id = attributeDict["id"] ?? "nil"
-            let sentenceRelativeCount = Int(attributeDict["sentenceRelativeCount"] ?? "nil") ?? -1
-            let english = attributeDict["English"] ?? "nil"
-            let chinese = attributeDict["Chinese"] ?? "nil"
-            let speaker = attributeDict["speaker"] ?? "nil"
+            let sentenceRelativeCount = Int(attributeDict["sentenceRelativeCount"] ?? "") ?? -1
+            let english = attributeDict["English"] ?? ""
+            let chinese = attributeDict["Chinese"] ?? ""
+            let speaker = attributeDict["speaker"] ?? ""
             currentSentence = Sentence(id: id,
                                        sentenceRelativeCount: sentenceRelativeCount,
                                        english: english,

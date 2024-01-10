@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		BF12E28E2B4CEA7D0003D7A5 /* blank.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = BF12E28D2B4CEA7D0003D7A5 /* blank.mp3 */; };
 		BF227C442ABC9EA70045894E /* DisplayModes.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF227C432ABC9EA70045894E /* DisplayModes.swift */; };
 		BF6552B32AA9B75E0069F4D5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF6552B22AA9B75E0069F4D5 /* AppDelegate.swift */; };
 		BF6552B52AA9B75E0069F4D5 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF6552B42AA9B75E0069F4D5 /* SceneDelegate.swift */; };
@@ -20,11 +21,14 @@
 		BFCF73082ABADA9800760A4A /* TableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFCF73072ABADA9700760A4A /* TableViewCell.swift */; };
 		BFCF730D2ABAE19200760A4A /* XMLParsing.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFCF730C2ABAE19200760A4A /* XMLParsing.swift */; };
 		BFCF73102ABAED2B00760A4A /* ReadingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFCF730F2ABAED2B00760A4A /* ReadingViewController.swift */; };
+		BFD723272B4C476800914146 /* ENZHView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFD723262B4C476800914146 /* ENZHView.swift */; };
+		BFE286D82B35475A004E2CE4 /* PinyinTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFE286D72B35475A004E2CE4 /* PinyinTextView.swift */; };
 		BFEA4DB32AA9BB7B00E2246D /* Assets_Root in Resources */ = {isa = PBXBuildFile; fileRef = BFEA4DB22AA9BB7B00E2246D /* Assets_Root */; };
 		BFEA4DB52AA9BBA000E2246D /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFEA4DB42AA9BBA000E2246D /* Utils.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		BF12E28D2B4CEA7D0003D7A5 /* blank.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = blank.mp3; sourceTree = "<group>"; };
 		BF227C432ABC9EA70045894E /* DisplayModes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayModes.swift; sourceTree = "<group>"; };
 		BF6552AF2AA9B75E0069F4D5 /* WE_Study_App_03.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WE_Study_App_03.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BF6552B22AA9B75E0069F4D5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -40,6 +44,8 @@
 		BFCF73072ABADA9700760A4A /* TableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewCell.swift; sourceTree = "<group>"; };
 		BFCF730C2ABAE19200760A4A /* XMLParsing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XMLParsing.swift; sourceTree = "<group>"; };
 		BFCF730F2ABAED2B00760A4A /* ReadingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadingViewController.swift; sourceTree = "<group>"; };
+		BFD723262B4C476800914146 /* ENZHView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ENZHView.swift; sourceTree = "<group>"; };
+		BFE286D72B35475A004E2CE4 /* PinyinTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinyinTextView.swift; sourceTree = "<group>"; };
 		BFEA4DB22AA9BB7B00E2246D /* Assets_Root */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Assets_Root; sourceTree = "<group>"; };
 		BFEA4DB42AA9BBA000E2246D /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -66,6 +72,7 @@
 		BF6552A62AA9B75E0069F4D5 = {
 			isa = PBXGroup;
 			children = (
+				BF12E28D2B4CEA7D0003D7A5 /* blank.mp3 */,
 				BFEA4DB22AA9BB7B00E2246D /* Assets_Root */,
 				BF6552B12AA9B75E0069F4D5 /* WE_Study_App_03 */,
 				BF6552B02AA9B75E0069F4D5 /* Products */,
@@ -138,6 +145,8 @@
 			children = (
 				BFCF730F2ABAED2B00760A4A /* ReadingViewController.swift */,
 				BFC3E7142ABC19E3007C4BA3 /* PageViewController.swift */,
+				BFD723262B4C476800914146 /* ENZHView.swift */,
+				BFE286D72B35475A004E2CE4 /* PinyinTextView.swift */,
 			);
 			path = PageView;
 			sourceTree = "<group>";
@@ -202,6 +211,7 @@
 			files = (
 				BF6552BC2AA9B75F0069F4D5 /* Assets.xcassets in Resources */,
 				BFEA4DB32AA9BB7B00E2246D /* Assets_Root in Resources */,
+				BF12E28E2B4CEA7D0003D7A5 /* blank.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -216,10 +226,12 @@
 				BFCF73082ABADA9800760A4A /* TableViewCell.swift in Sources */,
 				BFCF73062ABAD84500760A4A /* String+Extensions.swift in Sources */,
 				BFC3E7152ABC19E3007C4BA3 /* PageViewController.swift in Sources */,
+				BFE286D82B35475A004E2CE4 /* PinyinTextView.swift in Sources */,
 				BFC3E7132ABC1877007C4BA3 /* AudioHandler.swift in Sources */,
 				BFAC68852AB0124D0012910C /* UIColor+Extensions.swift in Sources */,
 				BF6552B32AA9B75E0069F4D5 /* AppDelegate.swift in Sources */,
 				BFCF73102ABAED2B00760A4A /* ReadingViewController.swift in Sources */,
+				BFD723272B4C476800914146 /* ENZHView.swift in Sources */,
 				BF6552B52AA9B75E0069F4D5 /* SceneDelegate.swift in Sources */,
 				BFEA4DB52AA9BBA000E2246D /* Utils.swift in Sources */,
 				BFAC68872AB01FF00012910C /* BookContentListView.swift in Sources */,

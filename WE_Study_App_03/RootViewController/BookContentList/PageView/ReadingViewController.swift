@@ -18,7 +18,7 @@ class ReadingViewController: UIViewController {
     private var totalSentenceCount: Int = 0
     
     private var animatePageTransition = true
-    private var displayMode = ReaderViewDisplayMode.en_zh
+    private var displayMode: ENZHDisplayMode = .EnglishAndChinese
     
     private lazy var audioHandler: AudioHandler? = {
         let audioHandler = AudioHandler()
@@ -132,7 +132,7 @@ class ReadingViewController: UIViewController {
     
     override func loadView() {
         view = UIView(frame: UIScreen.main.bounds)
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = .black
         addChildViewcontrollers()
         setupView()
         setupConstraints()
@@ -207,14 +207,14 @@ class ReadingViewController: UIViewController {
         self.indexToLessonAndSentenceMap = indexToSentenceMap
         self.totalSentenceCount = counter
         
-        print(indexToSentenceMap)
-        print(totalSentenceCount)
+//        print(indexToSentenceMap)
+//        print(totalSentenceCount)
     }
     
     private func getPageViewController(at currentIndex: Int) -> PageViewController {
-        print(indexToLessonAndSentenceMap)
+//        print(indexToLessonAndSentenceMap)
         let (currentlessonIndex, currentsentenceRelativeIndex) = indexToLessonAndSentenceMap[currentIndex] ?? (0,0)
-        print(currentlessonIndex, currentsentenceRelativeIndex)
+//        print(currentlessonIndex, currentsentenceRelativeIndex)
         let lesson = content[currentlessonIndex]
         let sentence = lesson.sentences[currentsentenceRelativeIndex]
         let id = sentence.id
@@ -223,7 +223,8 @@ class ReadingViewController: UIViewController {
     
     private func playAudio() {
         let currentPage = self.pageViewController.viewControllers![0] as! PageViewController
-        let audioFilePath = Bundle.main.resourcePath! + "/" + bookName + "/" + "Lesson_" + String(format: "%03d", (currentPage.sentence.sentenceRelativeCount)) + ".mp3"
+        let audioFilePath = Bundle.main.resourcePath! + "/" + "Assets_Root/" + bookName + "/" + "AudioFiles/" + currentPage.id.components(separatedBy: "-")[0] + "/" + String(format: "%03d", currentPage.index + 1) + ".wav"
+//        print("Audio file path: \(audioFilePath)")
         self.audioHandler?.filePath = audioFilePath
         self.audioHandler?.playAudio()
     }
@@ -312,7 +313,7 @@ extension ReadingViewController: UIPageViewControllerDataSource {
         }
         
         if currentIndex == 0 {
-            currentIndex = self.content.count - 1
+            currentIndex = totalSentenceCount - 1
         } else {
             currentIndex -= 1
         }

@@ -5,9 +5,9 @@
 //  Created by Xingzhe Xin on 2023/9/21.
 //
 
-enum ReaderViewDisplayMode {
-    case enOnly
-    case zhOnly
-    case en_zh
-    case blankForDictation
+enum ENZHDisplayMode{
+    case EnglishOnly
+    case ChinesesOnly
+    case EnglishAndChinese
+    case blank
 }
