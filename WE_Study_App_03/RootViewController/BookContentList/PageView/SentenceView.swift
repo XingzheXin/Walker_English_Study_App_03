@@ -15,6 +15,8 @@ struct SentenceView: View {
     let defaultEnglishFontSize = 100.0
     let defaultChineseFontSize = 30.0
     let defaultSpeakerFontSize = 40.0
+    let defaultEnglishFontName = "Times New Roman"
+    let defaultChineseFontName = "FangSong"
 
     var body: some View {
         GeometryReader { geometry in
@@ -22,8 +24,10 @@ struct SentenceView: View {
                 if !speakerText.isEmpty {
                     HStack {
                         displayText(
-                            speakerText, fontName: "Times New Roman",
-                            baseFontSize: defaultSpeakerFontSize, color: .gray,
+                            speakerText,
+                            fontName: defaultEnglishFontName,
+                            baseFontSize: defaultSpeakerFontSize,
+                            color: .gray,
                             in: geometry.size)
                         Spacer()
                     }
@@ -32,26 +36,33 @@ struct SentenceView: View {
                 switch displayMode {
                 case .englishOnly:
                     displayText(
-                        englishText, fontName: "Times New Roman",
-                        baseFontSize: defaultEnglishFontSize, color: .white,
+                        englishText,
+                        fontName: defaultEnglishFontName,
+                        baseFontSize: defaultEnglishFontSize,
+                        color: .white,
                         in: geometry.size)
 
                 case .chineseOnly:
                     displayText(
-                        chineseText, fontName: "FangSong",
-                        baseFontSize: defaultChineseFontSize, color: .white,
+                        chineseText,
+                        fontName: defaultChineseFontName,
+                        baseFontSize: defaultChineseFontSize,
+                        color: .white,
                         in: geometry.size)
 
                 case .englishAndChinese:
                     displayText(
-                        englishText, fontName: "Times New Roman",
-                        baseFontSize: defaultEnglishFontSize, color: .white,
+                        englishText,
+                        fontName: defaultEnglishFontName,
+                        baseFontSize: defaultEnglishFontSize,
+                        color: .white,
                         in: geometry.size)
                     displayText(
-                        chineseText, fontName: "FangSong",
-                        baseFontSize: defaultChineseFontSize, color: .white,
+                        chineseText,
+                        fontName: defaultChineseFontName,
+                        baseFontSize: defaultChineseFontSize,
+                        color: .white,
                         in: geometry.size)
-
                 case .blank:
                     EmptyView()
                 }
