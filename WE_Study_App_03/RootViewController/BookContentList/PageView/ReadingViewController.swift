@@ -26,20 +26,6 @@ class ReadingViewController: UIViewController {
         return audioHandler
     }()
     
-    
-//    private lazy var pageViewController: UIPageViewController = {
-//        let pageViewController = UIPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal)
-//        pageViewController.delegate = self
-//        pageViewController.dataSource = self
-//        pageViewController.view.translatesAutoresizingMaskIntoConstraints = false
-//
-//        print(selectedSections[0])
-//        print(selectedSections[0].sentences[0])
-//        let page = PageViewController(id: selectedSections[0].sentences[0].id, sentence: selectedSections[0].sentences[0], index: 0, displayMode: self.displayMode)
-//        pageViewController.setViewControllers([page], direction: .forward, animated: false, completion: nil)
-//        return pageViewController
-//    }()
-    
     private lazy var pageViewController: UIPageViewController = {
         let pageViewController = UIPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal)
         pageViewController.delegate = self
@@ -69,8 +55,6 @@ class ReadingViewController: UIViewController {
 
         return pageViewController
     }()
-
-
     
     private lazy var customBackButton = {
         let customBackButton = UIButton()

@@ -32,9 +32,8 @@ class RootViewController: UIViewController {
         scrollView.backgroundColor = .clear
         scrollView.addSubview(buttonsVerticalStackView)
         return scrollView
-        
     }()
-
+    
     private lazy var buttonsVerticalStackView: UIStackView = {
         let buttonsVerticalStackView = UIStackView()
         buttonsVerticalStackView.axis = .vertical
@@ -43,10 +42,10 @@ class RootViewController: UIViewController {
         buttonsVerticalStackView.translatesAutoresizingMaskIntoConstraints = false
         
         let buttonTextFromAssetsFolderNames = Utils.getSortedDirectories(in: "Assets_Root/")
-        let btnSizeMultiplier = 1.0/3
+        let btnSizeMultiplier = 1.0 / 3
         
         var idx = 0
-        for row in 0..<(buttonTextFromAssetsFolderNames.count + 1)/2{
+        for row in 0..<(buttonTextFromAssetsFolderNames.count + 1)/2 {
             let rowStack = UIStackView()
             rowStack.distribution = .equalSpacing // Filling equally horizontally
             buttonsVerticalStackView.addArrangedSubview(rowStack)
@@ -62,34 +61,57 @@ class RootViewController: UIViewController {
                     break
                 }
                 let btn = UIButton()
-                
-                btn.setTitle("📚" + buttonTextFromAssetsFolderNames[idx], for: .normal)
+
+                // Set button properties
+                btn.setTitle(nil, for: .normal) // Clear the plain title
+
+                // Customize the stroke attributes
+                let strokeTextAttributes: [NSAttributedString.Key: Any] = [
+                    .strokeColor: UIColor.black, // Outline color (e.g., black)
+                    .foregroundColor: UIColor.white, // Text color
+                    .strokeWidth: -3.0, // Stroke width (negative means inside the text)
+                    .font: UIFont(name: "Marker Felt Wide", size: 100) ?? UIFont.systemFont(ofSize: 100) // Use the custom font or fallback to system
+                ]
+
+                // Create an attributed string with the stroke effect and your text
+                let attributedTitle = NSAttributedString(
+                    string: "📚" + buttonTextFromAssetsFolderNames[idx],
+                    attributes: strokeTextAttributes
+                )
+
+                // Set the attributed string as the button's title
+                btn.setAttributedTitle(attributedTitle, for: .normal)
+
+                // Ensure that the button clips content within its bounds
+                btn.clipsToBounds = true
+
+                // Set dynamic corner radius based on the button’s width/height to maintain a circular/rounded appearance
+                btn.layer.cornerRadius = 25  // Change this to btn.layer.cornerRadius = btn.frame.height / 2 if you want a perfect round
+
+                // Continue setting other properties
                 btn.backgroundColor = UIColor.random()
                 btn.titleLabel?.adjustsFontSizeToFitWidth = true
-                btn.titleLabel?.font = UIFont(name: "Marker Felt Wide", size: 100)
-                btn.titleLabel?.minimumScaleFactor = 0.1
+                btn.titleLabel?.minimumScaleFactor = 0.01
                 btn.titleLabel?.lineBreakMode = .byClipping
                 btn.titleLabel?.numberOfLines = 1
                 btn.titleLabel?.baselineAdjustment = .alignCenters
 
-                btn.layer.cornerRadius = 100
                 btn.addTarget(self, action: #selector(onClickBookNameButton), for: .touchUpInside)
                 btn.translatesAutoresizingMaskIntoConstraints = false
                 rowStack.addArrangedSubview(btn)
+                
+                // Set dynamic size of the button
                 NSLayoutConstraint.activate([
                     btn.widthAnchor.constraint(equalTo: rowStack.widthAnchor, multiplier: btnSizeMultiplier),
                     btn.heightAnchor.constraint(equalTo: rowStack.heightAnchor),
                 ])
                 
-                // If it's the left button
+                // Handle spacing
                 if idx % 2 == 0 {
-                    // If it's the last button, we stop adding spacers
                     if idx == buttonTextFromAssetsFolderNames.count - 1 {
                         break
-                    }
-                    else {
+                    } else {
                         let middleSpacer = UIView()
-//                        middleSpacer.backgroundColor = .green
                         rowStack.addArrangedSubview(middleSpacer)
                         middleSpacer.widthAnchor.constraint(equalTo: rowStack.widthAnchor, multiplier: (1 - 2 * btnSizeMultiplier) / 3 - 0.1).isActive = true
                     }
@@ -97,15 +119,14 @@ class RootViewController: UIViewController {
                 idx += 1
             }
 
-            // The -0.1 is here so that the total width of all the elements does not exceed the width of the row
-            // because of rounding errors the width does not add up to exactly the same amount as the width of the row
             rowStack.addArrangedSubview(trailingSpacer)
             leadingSpacer.widthAnchor.constraint(equalTo: rowStack.widthAnchor, multiplier: (1 - 2 * btnSizeMultiplier) / 3 - 0.1).isActive = true
             trailingSpacer.widthAnchor.constraint(equalTo: rowStack.widthAnchor, multiplier: (1 - 2 * btnSizeMultiplier) / 3 - 0.1).isActive = true
-
         }
         return buttonsVerticalStackView
     }()
+
+    
     
     override func loadView() {
         self.view = UIView(frame: UIScreen.main.bounds)

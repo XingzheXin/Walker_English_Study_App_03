@@ -7,52 +7,6 @@
 
 import SwiftUI
 
-//struct SentenceView: View {
-//    let ENText: String
-//    let ZHText: String
-//    let displayMode: ENZHDisplayMode
-//    let defaultEnglishFontSize = 120.0
-//
-//    var body: some View {
-//        switch displayMode {
-//        case .EnglishOnly:
-//            Text(ENText)
-//                .font(.custom("Times New Roman", size: defaultEnglishFontSize))
-//                .foregroundStyle(.white)
-//                .minimumScaleFactor(0.01)
-//                .multilineTextAlignment(.leading)
-//        case .ChinesesOnly:
-//            Text(ZHText)
-//                .font(.custom("FangSong", size: defaultEnglishFontSize))
-//                .foregroundStyle(.white)
-//                .minimumScaleFactor(0.01)
-//                .multilineTextAlignment(.leading)
-//        case .EnglishAndChinese:
-//            VStack {
-//                Text(ENText)
-//                    .font(.custom("Times New Roman", size: defaultEnglishFontSize))
-//                    .foregroundStyle(.white)
-//                    .minimumScaleFactor(0.01)
-//                    .multilineTextAlignment(.leading)
-//                    .padding(100)
-//                Text(ZHText)
-//                    .font(.custom("Times New Roman", size: 30))
-//                    .foregroundStyle(.white)
-//                    .minimumScaleFactor(0.01)
-//                    .multilineTextAlignment(.leading)
-//            }
-//        default:
-//            Text("")
-//        }
-//    }
-
-enum DisplayMode {
-    case englishOnly
-    case chineseOnly
-    case englishAndChinese
-    case blank
-}
-
 struct SentenceView: View {
     let englishText: String
     let chineseText: String
@@ -85,7 +39,7 @@ struct SentenceView: View {
                 case .chineseOnly:
                     displayText(
                         chineseText, fontName: "FangSong",
-                        baseFontSize: defaultEnglishFontSize, color: .white,
+                        baseFontSize: defaultChineseFontSize, color: .white,
                         in: geometry.size)
 
                 case .englishAndChinese:
@@ -111,25 +65,10 @@ struct SentenceView: View {
         _ text: String, fontName: String, baseFontSize: Double, color: Color,
         in size: CGSize
     ) -> some View {
-        Text(text)
-            .font(
-                .custom(
-                    fontName,
-                    size: fontSize(for: text, in: size, baseSize: baseFontSize))
-            )
+        Text(text).font(.custom(fontName, size: baseFontSize))
             .foregroundColor(color)
             .minimumScaleFactor(0.01)
             .multilineTextAlignment(.leading)
             .padding()
-    }
-
-    // Adjust font size dynamically based on text length and available space
-    private func fontSize(for text: String, in size: CGSize, baseSize: Double)
-        -> Double
-    {
-        let textLength = Double(text.count)
-        let area = size.width * size.height
-        let scaleFactor = min(area / textLength, baseSize)
-        return max(scaleFactor, baseSize * 0.5)
     }
 }
