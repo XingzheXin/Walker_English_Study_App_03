@@ -75,7 +75,4 @@ class PageViewController: UIViewController, UITextViewDelegate {
             hostingController.view.rightAnchor.constraint(equalTo: view.rightAnchor),
         ])
     }
-    
-    
 }
-
