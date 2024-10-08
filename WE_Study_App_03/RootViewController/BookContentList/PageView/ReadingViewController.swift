@@ -11,14 +11,14 @@ import AVFoundation
 
 class ReadingViewController: UIViewController {
     
-    private var content: [Lesson]
     private var bookName: String
-    
-    private var indexToLessonAndSentenceMap: [Int: (Int, Int)] = [:]
+    private var selectedSections: [FlattenedSection]
+
+    private var indexToSectionAndSentenceMap: [Int: (Int, Int)] = [:]
     private var totalSentenceCount: Int = 0
     
     private var animatePageTransition = true
-    private var displayMode: ENZHDisplayMode = .EnglishAndChinese
+    private var displayMode: SentenceDisplayModes = .englishAndChinese
     
     private lazy var audioHandler: AudioHandler? = {
         let audioHandler = AudioHandler()
@@ -27,20 +27,50 @@ class ReadingViewController: UIViewController {
     }()
     
     
+//    private lazy var pageViewController: UIPageViewController = {
+//        let pageViewController = UIPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal)
+//        pageViewController.delegate = self
+//        pageViewController.dataSource = self
+//        pageViewController.view.translatesAutoresizingMaskIntoConstraints = false
+//
+//        print(selectedSections[0])
+//        print(selectedSections[0].sentences[0])
+//        let page = PageViewController(id: selectedSections[0].sentences[0].id, sentence: selectedSections[0].sentences[0], index: 0, displayMode: self.displayMode)
+//        pageViewController.setViewControllers([page], direction: .forward, animated: false, completion: nil)
+//        return pageViewController
+//    }()
+    
     private lazy var pageViewController: UIPageViewController = {
         let pageViewController = UIPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal)
         pageViewController.delegate = self
         pageViewController.dataSource = self
         pageViewController.view.translatesAutoresizingMaskIntoConstraints = false
-        // *******************************************************************
-        // Set initial viewcontroller
-//        let page = PageViewController(id: "abcdefg", index: 0, displayMode: .en_zh)
-        let page = PageViewController(id: content[0].id, sentence: content[0].sentences[0], index: 0, displayMode: self.displayMode)
-        pageViewController.setViewControllers([page], direction: .forward, animated: false, completion: nil)
-        // *******************************************************************
-        
+
+        // Find the first section that contains sentences
+        if let firstSectionWithSentences = selectedSections.first(where: { !$0.sentences.isEmpty }) {
+            let firstSentence = firstSectionWithSentences.sentences[0]
+            
+            // Initialize the page view controller with the first available sentence
+            let page = PageViewController(id: firstSentence.id, sentence: firstSentence, index: 0, displayMode: self.displayMode)
+            pageViewController.setViewControllers([page], direction: .forward, animated: false, completion: nil)
+        } else {
+            // Handle the case where no sentences are available by showing a placeholder page
+            let placeholderSentence = Sentence(
+                id: "placeholder",
+                index: "0",
+                english: "No content available",
+                chinese: nil,
+                speaker: "System"
+            )
+            
+            let placeholderPage = PageViewController(id: placeholderSentence.id, sentence: placeholderSentence, index: 0, displayMode: self.displayMode)
+            pageViewController.setViewControllers([placeholderPage], direction: .forward, animated: false, completion: nil)
+        }
+
         return pageViewController
     }()
+
+
     
     private lazy var customBackButton = {
         let customBackButton = UIButton()
@@ -119,9 +149,9 @@ class ReadingViewController: UIViewController {
         return topBar
     }()
     
-    init(bookName: String, content: [Lesson]) {
+    init(bookName: String, selectedSections: [FlattenedSection]) {
         self.bookName = bookName
-        self.content = content
+        self.selectedSections = selectedSections
         super.init(nibName: nil, bundle: nil)
         generateMappingAndPageCount()
     }
@@ -193,41 +223,93 @@ class ReadingViewController: UIViewController {
         }
     }
     
+//    private func generateMappingAndPageCount() {
+//        
+//        var indexToSentenceMap: [Int: (Int, Int)] = [:]
+//        var counter = 0
+//        for i in 0..<selectedSections.count {
+//            for j in 0..<selectedSections[i].sentences.count {
+//                indexToSentenceMap[counter] = (i, j)
+//                counter += 1
+//            }
+//        }
+//        
+//        self.indexToSectionAndSentenceMap = indexToSentenceMap
+//        self.totalSentenceCount = counter
+//    }
+//    
     private func generateMappingAndPageCount() {
-        
         var indexToSentenceMap: [Int: (Int, Int)] = [:]
         var counter = 0
-        for i in 0..<content.count {
-            for j in 0..<content[i].sentences.count {
-                indexToSentenceMap[counter] = (i, j)
+
+        // Iterate through the already flattened sections
+        for (sectionIndex, section) in selectedSections.enumerated() {
+            // Skip sections that do not contain any sentences
+            guard !section.sentences.isEmpty else {
+                continue
+            }
+
+            // Loop through each sentence in the current flattened section
+            for (sentenceIndex, _) in section.sentences.enumerated() {
+                indexToSentenceMap[counter] = (sectionIndex, sentenceIndex)
                 counter += 1
             }
         }
         
-        self.indexToLessonAndSentenceMap = indexToSentenceMap
+        // Assign the mapping and total sentence count
+        self.indexToSectionAndSentenceMap = indexToSentenceMap
         self.totalSentenceCount = counter
-        
-//        print(indexToSentenceMap)
-//        print(totalSentenceCount)
     }
+
     
     private func getPageViewController(at currentIndex: Int) -> PageViewController {
-//        print(indexToLessonAndSentenceMap)
-        let (currentlessonIndex, currentsentenceRelativeIndex) = indexToLessonAndSentenceMap[currentIndex] ?? (0,0)
-//        print(currentlessonIndex, currentsentenceRelativeIndex)
-        let lesson = content[currentlessonIndex]
-        let sentence = lesson.sentences[currentsentenceRelativeIndex]
+        let (currentSectionIndex, currentsentenceRelativeIndex) = indexToSectionAndSentenceMap[currentIndex] ?? (0,0)
+        let section = selectedSections[currentSectionIndex]
+        let sentence = section.sentences[currentsentenceRelativeIndex]
         let id = sentence.id
         return PageViewController(id: id, sentence: sentence, index: currentIndex, displayMode: displayMode)
     }
     
     private func playAudio() {
-        let currentPage = self.pageViewController.viewControllers![0] as! PageViewController
-        let audioFilePath = Bundle.main.resourcePath! + "/" + "Assets_Root/" + bookName + "/" + "AudioFiles/" + currentPage.id.components(separatedBy: "-")[0] + "/" + String(format: "%03d", currentPage.index + 1) + ".wav"
-//        print("Audio file path: \(audioFilePath)")
+        guard let currentPage = self.pageViewController.viewControllers?.first as? PageViewController else {
+            print("No current page available")
+            return
+        }
+        
+        let (currentSectionIndex, currentSentenceRelativeIndex) = indexToSectionAndSentenceMap[currentPage.index] ?? (0,0)
+
+        let flattenedSection = selectedSections[currentSectionIndex]
+        
+        // Reconstruct the path from the ancestry
+        var pathComponents: [String] = ["Assets_Root", bookName, "Assets"]
+        for ancestor in flattenedSection.ancestry {
+            if ancestor.type == "root" {
+                continue
+            }
+            
+            var sectionFolderName = ancestor.type.replacingOccurrences(of: " ", with: "_")
+            if ancestor.index != "" {
+                sectionFolderName += "_\(ancestor.index)"
+            }
+            pathComponents.append(sectionFolderName)
+        }
+        var currentSectionFolderName = flattenedSection.type.replacingOccurrences(of: " ", with: "_")
+        if flattenedSection.index != "" {
+            currentSectionFolderName += "_\(flattenedSection.index)"
+        }
+        pathComponents.append(currentSectionFolderName)
+        // Add the AudioFiles folder and file name
+        pathComponents.append("AudioFiles")
+        let sentenceIndex = selectedSections[currentSectionIndex].sentences[currentSentenceRelativeIndex].index
+        pathComponents.append("\(sentenceIndex).wav")
+        
+        let audioFilePath = Bundle.main.resourcePath! + "/" + pathComponents.joined(separator: "/")
+        
+        print("Audio file path: \(audioFilePath)")
         self.audioHandler?.filePath = audioFilePath
         self.audioHandler?.playAudio()
     }
+
     
     private func manuallyPauseAudio() {
         self.audioHandler?.isManuallyPaused = true

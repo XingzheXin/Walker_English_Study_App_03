@@ -14,10 +14,10 @@ class PageViewController: UIViewController, UITextViewDelegate {
     let id: String
     let sentence: Sentence
     let index: Int
-    let displayMode: ENZHDisplayMode
+    let displayMode: SentenceDisplayModes
    
     private lazy var hostingController = {
-        let swiftUIView = ENZHView(ENText: sentence.english, ZHText: sentence.chinese, displayMode: .EnglishAndChinese)
+        let swiftUIView = SentenceView(englishText: sentence.english ?? "", chineseText: sentence.chinese ?? "", speakerText: sentence.speaker ?? "", displayMode: .englishAndChinese)
         let hostingController = UIHostingController(rootView: swiftUIView)
         hostingController.view.translatesAutoresizingMaskIntoConstraints = false
         hostingController.view.backgroundColor = .black
@@ -41,27 +41,11 @@ class PageViewController: UIViewController, UITextViewDelegate {
 //            return false // Return false to not perform the default action, true if you want the default action to be performed
 //    }
     
-    private lazy var chineseSentenceLabel = {
-        let v = UILabel()
-        v.layer.borderColor = UIColor.black.cgColor
-        v.layer.borderWidth = 2.0
-        v.numberOfLines = 0
-        v.text = sentence.chinese
-        v.textAlignment = .center
-        v.font = UIFont(name: "Times New Roman", size: 30)
-        v.minimumScaleFactor = 0.01
-        v.adjustsFontSizeToFitWidth = true
-        v.isUserInteractionEnabled = true
-        v.translatesAutoresizingMaskIntoConstraints = false
-        return v
-        
-    }()
-    
     required init?(coder: NSCoder) {
         fatalError("PageView init(coder: ) not implemented")
     }
   
-    init(id: String, sentence: Sentence, index: Int, displayMode: ENZHDisplayMode) {
+    init(id: String, sentence: Sentence, index: Int, displayMode: SentenceDisplayModes) {
         self.id = id
         self.index = index
         self.sentence = sentence
@@ -85,10 +69,10 @@ class PageViewController: UIViewController, UITextViewDelegate {
     
     private func setupConstraints() {
         NSLayoutConstraint.activate([
-            hostingController.view.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            hostingController.view.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            hostingController.view.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor),
-            hostingController.view.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor),
+            hostingController.view.topAnchor.constraint(equalTo: view.topAnchor),
+            hostingController.view.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            hostingController.view.leftAnchor.constraint(equalTo: view.leftAnchor),
+            hostingController.view.rightAnchor.constraint(equalTo: view.rightAnchor),
         ])
     }
     

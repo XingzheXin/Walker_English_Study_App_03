@@ -70,21 +70,4 @@ class Utils {
         
         return []
     }
-    
-
-}
-
-extension FileManager {
-
-    func directoryExists(atUrl url: URL) -> Bool {
-        var isDirectory: ObjCBool = false
-        let exists = self.fileExists(atPath: url.path, isDirectory:&isDirectory)
-        return exists && isDirectory.boolValue
-    }
-    
-    func directoryExists(atPath path: String) -> Bool {
-        var isDirectory: ObjCBool = false
-        let exists = fileExists(atPath: path, isDirectory:&isDirectory)
-        return exists && isDirectory.boolValue
-    }
 }

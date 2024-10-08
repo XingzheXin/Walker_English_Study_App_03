@@ -5,9 +5,9 @@
 //  Created by Xingzhe Xin on 2023/9/21.
 //
 
-enum ENZHDisplayMode{
-    case EnglishOnly
-    case ChinesesOnly
-    case EnglishAndChinese
+enum SentenceDisplayModes {
+    case englishOnly
+    case chineseOnly
+    case englishAndChinese
     case blank
 }

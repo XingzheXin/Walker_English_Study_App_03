@@ -1,4 +1,5 @@
 Assets_Root/
+Assets_Reserve/
 
 # ignore user files
 *.xcodeproj/../xcuserdata/
